@@ -2,7 +2,7 @@
   "development": {
     "username": "miqbal",
     "password": null,
-    "database": "demo",
+    "database": "todos",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
