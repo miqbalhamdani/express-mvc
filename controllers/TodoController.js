@@ -10,27 +10,47 @@ const { Todo } = require("../models");
 // },
 
 module.exports = {
-  index: async (_, res) => {
+  index: async (req, res) => {
+    const { name, id } = req.user.dataValues;
+
     // Get all todos
     const todos = await Todo.findAll({
+      where: {
+        UserId: id,
+      },
       order: [
         ['id', 'ASC'],
       ]
     });
 
     // Render todos in pages
-    res.render("todo/todo-list", { todos });
+    res.render("todo/todo-list", {
+      todos,
+      name,
+    });
   },
 
   // Show page to create todo
-  create: async (_, res) => {
-    res.render("todo/todo-create");
+  create: async (req, res) => {
+    res.render("todo/todo-create", {
+      name: req.user.dataValues.name,
+    });
   },
 
   // Send data to database
   post: async (req, res) => {
-    await Todo.create({ name: req.body.name });
-    res.redirect("/todo");
+    try {
+      await Todo.create(
+        {
+          name: req.body.name,
+          isDone: false,
+          UserId: req.user.dataValues.id
+        }
+      );
+      res.redirect("/todo");
+    } catch (error) {
+      console.log(error);
+    }
   },
 
   // Set todo to checked
