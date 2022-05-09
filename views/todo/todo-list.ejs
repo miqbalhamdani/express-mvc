@@ -31,7 +31,10 @@
               <li class="list-group-item d-flex justify-content-between">
                 <span class="<% if (todo.isDone) { %>
                   text-decoration-line-through
-                <% } %>"><%= todo.name %></span>
+                <% } %>">
+                  <%= todo.name %> <br>
+                  (<%= todo.formatedDate() %>)
+                </span>
 
                 <div>
                   <a href="/todo/check/<%= todo.id %>">

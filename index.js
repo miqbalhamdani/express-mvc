@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const express = require("express");
 const app = express();
 
@@ -8,7 +10,7 @@ app.use(express.urlencoded({ extended: false }));
 const session = require("express-session");
 app.use(
   session({
-    secret: "Buat ini jadi rahasia",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
   })
@@ -20,12 +22,18 @@ const passport = require("./lib/passport");
 app.use(passport.initialize());
 app.use(passport.session());
 
+// setting flash
+const flash = require("express-flash");
+app.use(flash());
+
 // setting router
 const todo = require("./routers/todos");
 const auth = require("./routers/auth");
 app.use(todo);
 app.use(auth);
 
-app.listen(3000, () => {
-  console.log("Your apps running in http://localhost:3000/ ...");
+const port = process.env.PORT;
+
+app.listen(port, () => {
+  console.log(`Your apps running in http://localhost:${port} ...`);
 });
