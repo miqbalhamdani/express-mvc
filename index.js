@@ -26,10 +26,19 @@ app.use(passport.session());
 const flash = require("express-flash");
 app.use(flash());
 
+// router for api
+const api = require("./routers/api");
+app.use('/api/v1', api);
+
+
 // setting router
 const todo = require("./routers/todos");
 const auth = require("./routers/auth");
-app.use(todo);
+
+// Tambahkan kode middleware ini setelah bagian controller
+const restrict = require('./middlewares/restrict')
+
+app.use('/todo', restrict, todo);
 app.use(auth);
 
 const port = process.env.PORT;
