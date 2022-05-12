@@ -2,6 +2,7 @@
 const { Model } = require("sequelize");
 
 const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken')
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -45,7 +46,24 @@ module.exports = (sequelize, DataTypes) => {
         return Promise.reject(err);
       }
     };
+
+    // Generate Token for API
+    generateToken = () => {
+      // Jangan memasukkan password ke dalam payload
+      const payload = {
+        id: this.id,
+        username: this.email
+      }
+
+      // Rahasia ini nantinya kita pakai untuk memverifikasi apakah token ini benar-benar berasal dari aplikasi kita
+      const rahasia = process.env.JWT_SECRET;
+
+      // Membuat token dari data-data diatas
+      const token = jwt.sign(payload, rahasia)
+      return token
+    };
   }
+
   User.init(
     {
       email: DataTypes.STRING,

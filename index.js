@@ -5,6 +5,16 @@ const app = express();
 
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
+// router for api
+const api = require("./routers/api");
+app.use('/api/v1', api);
+
+// initialize passport for api
+const passportApi = require('./lib/passportApi');
+app.use(passportApi.initialize());
+
 
 // setting session handler
 const session = require("express-session");
@@ -25,11 +35,6 @@ app.use(passport.session());
 // setting flash
 const flash = require("express-flash");
 app.use(flash());
-
-// router for api
-const api = require("./routers/api");
-app.use('/api/v1', api);
-
 
 // setting router
 const todo = require("./routers/todos");
