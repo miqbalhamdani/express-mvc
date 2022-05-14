@@ -3,7 +3,7 @@ const passport = require("../lib/passport");
 
 module.exports = {
   register: (req, res) => {
-    res.render("register");
+    res.render("register", { layout: 'layouts/auth' });
   },
 
   registerPost: async (req, res, next) => {
@@ -18,7 +18,7 @@ module.exports = {
   },
 
   login: (req, res) => {
-    res.render("login");
+    res.render("login", { layout: 'layouts/auth' });
   },
 
   // Kalau mau tulis di file controllers/authController.js

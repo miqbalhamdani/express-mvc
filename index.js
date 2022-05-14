@@ -3,7 +3,11 @@ require('dotenv').config()
 const express = require("express");
 const app = express();
 
+const expressLayouts = require('express-ejs-layouts');
 app.set("view engine", "ejs");
+app.use(expressLayouts);
+app.set('layout', 'layouts/default');
+
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
