@@ -1,0 +1,44 @@
+<div class="col-lg-8 col-sm-12 m-auto mt-5">
+  <div>
+    <a href="/todo/create">
+      <button class="btn btn-primary mb-3 float-right">Add Todo</button>
+    </a>
+  </div>
+
+  <ul id="list-group-todo" class="list-group">
+  </ul>
+</div>
+
+<script>
+  $(document).ready(() => {
+    // mengambil token dari cookie
+    const token = $.cookie('JWT_TOKEN');
+
+    if (!token) {
+      window.location = "http://localhost:8080/frontend/login";
+    }
+
+    if (!token) {
+      window.location = "http://localhost:8080/login";
+    }
+
+    $.ajax({
+      type: "GET",
+      url: "http://localhost:8080/api/v1/todo",
+      headers: {
+        'Authorization': token,
+      },
+      success: function(data)
+      {
+        // console.log('data dari todo', data);
+
+        $.each(data, (todoIndex, todoItem) => {
+          $("#list-group-todo")
+            .append('<li class="list-group-item d-flex justify-content-between">' + todoItem.name + '</li>');
+        });
+      }
+    });
+
+  });
+
+</script>

@@ -1,0 +1,83 @@
+<main class="form-signin">
+  <form id="form-login">
+    <h1 class="h3 mb-3 fw-normal">Please Login</h1>
+
+    <div class="form-floating mb-3">
+      <input
+        type="text"
+        name="email"
+        class="form-control"
+        placeholder="Input Email"
+      />
+      <label>Email</label>
+    </div>
+
+    <div class="form-floating mb-3">
+      <input
+        type="password"
+        name="password"
+        class="form-control"
+        placeholder="Input Password Password"
+      />
+      <label>Password</label>
+    </div>
+
+    <button class="w-100 btn btn-lg btn-primary" type="submit">
+      Login
+    </button>
+  </form>
+</main>
+
+<script>
+$(document).ready(() => {
+  function getThirtyDayFromNow() {
+    let date = new Date();
+    date.setDate(date.getDate() + 30);
+    const dateString = date.toISOString().split('T')[0];
+    return new Date(dateString);
+  };
+
+
+  $("#form-login").submit((event) => {
+    event.preventDefault();
+
+    const formData = jQuery('#form-login').serializeArray().reduce(function(obj, item) {
+      obj[item.name] = item.value;
+      return obj;
+    }, {});
+
+    // console.log(data);
+    // formdata = {
+    //   "email": "iqbal@gmail.com",
+    //   "password": "iqbal"
+    // }
+
+    $.ajax({
+      type: "POST",
+      url: "http://localhost:8080/api/v1/login",
+      data: formData, // serializes the form's elements.
+      success: function(data)
+      {
+        // console.log(data);
+        // data = {
+        //   "email": "iqbal@gmail.com",
+        //   "name": "iqbal",
+        //   "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJpcWJhbEBnbWFpbC5jb20iLCJpYXQiOjE2NTIzNDkyMzN9.hJb0qFV1Xx6KYZ1f-AEyfho6Lb7WwVY5B2n69TR5c2k"
+        // }
+
+        // simpan token ke dalam cookie
+        $.cookie("JWT_TOKEN", data.accessToken, {
+          expires: getThirtyDayFromNow(),
+          path: "/;SameSite=Lax"
+        });
+
+        // redirect ke halaman /demo
+        window.location = "http://localhost:8080/frontend/todo";
+      }
+    });
+
+  });
+
+});
+
+</script>

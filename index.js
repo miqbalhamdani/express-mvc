@@ -52,6 +52,15 @@ app.use(auth);
 
 const port = process.env.PORT;
 
+// DEMO MICROSERVICES (Implementasi Login Form with JWT)
+app.use('/frontend/login', (req, res) => {
+  res.render("frontend/login", { layout: 'layouts/auth' });
+});
+
+app.use('/frontend/todo', (req, res) => {
+  res.render("frontend/todo-list", { layout: 'layouts/auth' });
+});
+
 app.listen(port, () => {
   console.log(`Your apps running in http://localhost:${port} ...`);
 });
